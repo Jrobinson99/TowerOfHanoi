@@ -5,9 +5,10 @@
  */
 
 #include <iostream>
-#include <vector>
+#include <string>
+#include <stack>
 
-/// Prototype function for the startText() function.
+ /// Prototype function for the startText() function.
 void startText();
 
 /// Prototype function for the howToPlay() function.
@@ -16,12 +17,17 @@ void howToPlay();
 /// Prototype function for the newGame() function.
 int newGame();
 
+/// Prototype function for the displayColumns() function.
+void displayColumns(std::stack<int> columnOne,
+	std::stack<int> columnTwo,
+	std::stack<int> columnThree);
+
 /**
  * main function that provides the primary operations of the game.
  *
  * @return 0 to exit the program once the user is finished.
  */
-int main(){
+int main() {
 	// Call the startText() function and display the start menu.
 	startText();
 
@@ -31,23 +37,26 @@ int main(){
 	bool gameOver = false;
 
 	// While gameOver is equal to false, then keep the game running.
-	while(!gameOver) {
+	while (!gameOver) {
 		// Holds how many disks the user wants during their game.
 		int disks = newGame();
 
-		// Two-dimensional (3x10) int array that will hold the disks for the game.
-		// Three vectors could be used to replace this, but to reduce memory, an
-		// array is used. To save even more memory, three linked lists could be used instead.
-		int columns[3][10]{0};
+		// Stack to hold all elements for column one.
+		std::stack<int> columnOne;
+		// Stack to hold all elements for column two.
+		std::stack<int> columnTwo;
+		// Stack to hold all elements for column three.
+		std::stack<int> columnThree;
 
-		// In order, smallest to largest, write each disk to column 'A'.
-		for (int i = 0; i != disks; ++i) {
-			columns[0][i] = i;
+		// Push selected number of disks into columnOne in decending order.
+		// Start from largest element i and progressively get smaller, stopping
+		// at 1.
+		for (int i = disks; i >= 1; --i) {
+			// Push int i into columnOne.
+			columnOne.push(i);
 		}
 
-		for (int i = 0; i != 9; ++i) {
-			std::cout << columns[0][i] << std::endl;
-		}
+		displayColumns(columnOne, columnTwo, columnThree);
 
 	}
 
@@ -129,11 +138,40 @@ int newGame() {
 		else if (disks < 3 || disks > 10) {
 			// Let the user know the number they entered is invalid.
 			std::cout << "Woops! It looks like that number is invalid. lets try that again!" << std::endl << std::endl;
-		}else{
+		}
+		else {
 			// Nothing goes within this else statement, therefore, doNothing();
 		}
 	}
 
 	// Return how many disks the user wants.
 	return disks;
+}
+
+/**
+ * This function takes three stack objects and outputs them to the console
+ * in a graphical manner that allows the user to visualize their game.
+ *
+ * @stack object for column one.
+ *
+ * @stack object for column two.
+ *
+ * @stack object for column three.
+ */
+void displayColumns(std::stack<int> columnOne,
+	std::stack<int> columnTwo,
+	std::stack<int> columnThree) {
+
+	// Holds the value of the largest column.
+	int largestColumn = 0;
+
+
+	if ((columnOne.size() >= columnTwo.size()) && (columnOne.size() >= columnThree.size()))
+		largestColumn = columnOne.size();
+	else if ((columnTwo.size() >= columnOne.size()) && (columnTwo.size() >= columnThree.size()))
+		largestColumn = columnTwo.size();
+	else
+		largestColumn = columnThree.size();
+
+	std::cout << largestColumn << std::endl;
 }

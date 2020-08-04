@@ -116,11 +116,11 @@ int newGame() {
 	int disks = -1;
 
 	// While 
-	while (disks < 3 || disks > 10) {
+	while (disks < 3 || disks > 9) {
 
 		// Ask the user how many disks they would like in their game.
 		std::cout << "How many rings would you like?" << std::endl;
-		std::cout << "Enter a number between 3 and 10 : ";
+		std::cout << "Enter a number between 3 and 9 : ";
 
 		// Collect an input from the user.
 		std::cin >> disks;
@@ -135,7 +135,7 @@ int newGame() {
 			std::cout << "Woops! Thats not a number. Lets try that again." << std::endl << std::endl;
 		}
 		// If the user entered a value that is less than 3 or greater than 10.
-		else if (disks < 3 || disks > 10) {
+		else if (disks < 3 || disks > 9) {
 			// Let the user know the number they entered is invalid.
 			std::cout << "Woops! It looks like that number is invalid. lets try that again!" << std::endl << std::endl;
 		}
@@ -159,19 +159,98 @@ int newGame() {
  * @stack object for column three.
  */
 void displayColumns(std::stack<int> columnOne,
-	std::stack<int> columnTwo,
-	std::stack<int> columnThree) {
+					std::stack<int> columnTwo,
+					std::stack<int> columnThree) {
 
-	// Holds the value of the largest column.
-	int largestColumn = 0;
+	// Holds the value of which 'row' is currently being read.
+	// This is set to whichever column is the largest.
+	int currentRow = 0;
 
+	// If columnOne is larger than columnTwo and columnThree.
+	if ((columnOne.size() >= columnTwo.size()) && (columnOne.size() >= columnThree.size())) {
+		// Set currentRow to be equal to the size of columnOne.
+		currentRow = columnOne.size();
+	}
+	// Else if, columnTwo is larger than columnOne and columnThree.	
+	else if ((columnTwo.size() >= columnOne.size()) && (columnTwo.size() >= columnThree.size())) {
+		// Set currentRow to be equal to the size of columnTwo.
+		currentRow = columnTwo.size();
+	}
+	// Else, by process of elimination, columnThree must be the largest.
+	else {
+		// Set currentRow to be equal to the soze of columnThree.
+		currentRow = columnThree.size();
+	}
 
-	if ((columnOne.size() >= columnTwo.size()) && (columnOne.size() >= columnThree.size()))
-		largestColumn = columnOne.size();
-	else if ((columnTwo.size() >= columnOne.size()) && (columnTwo.size() >= columnThree.size()))
-		largestColumn = columnTwo.size();
-	else
-		largestColumn = columnThree.size();
+	// Clear the console so that the only thing displayed is the current move of the game.
+	system("CLS");
 
-	std::cout << largestColumn << std::endl;
+	// Formatting for the console.
+	std::cout << "-------------------" << std::endl;
+
+	// While our current row is not equal to zero, then continue
+	// to loop. Everything within this loop is printed on the same
+	// line, the loop is to format each line individually.
+	while (currentRow != 0) {
+
+		// Formatting for the console.
+		std::cout << "|  ";
+
+		// If columnOne is equal in size to the currentRow, output the 
+		// top of the column then delete the top element.
+		if (columnOne.size() == currentRow) {
+			// Display the top element to the console.
+			std::cout << columnOne.top();
+			// Pop off the top element.
+			columnOne.pop();
+		} else { 
+			// Add a single space to help keep the columns the same size.
+			std::cout << " ";
+		}
+
+		// Formatting for the console.
+		std::cout << "  |  ";
+
+		// If columnTwo is equal in size to the currentRow, output the 
+		// top of the column then delete the top element.
+		if (columnTwo.size() == currentRow) {
+			// Display the top element to the console.
+			std::cout << columnTwo.top();
+			// Pop off the top element.
+			columnTwo.pop();
+		} else {
+			// Add a single space to help keep the columns the same size.
+			std::cout << " ";
+		}
+
+		// Formatting for the console.
+		std::cout << "  |  ";
+
+		// If columnThree is equal in size to the currentRow, output the 
+		// top of the column then delete the top element.
+		if (columnThree.size() == currentRow) {
+			// Display the top element to the console.
+			std::cout << columnThree.top();
+			// Pop off the top element.
+			columnThree.pop();
+		} else {
+			// Add a single space to help keep the columns the same size.
+			std::cout << " ";
+		}
+
+		// Formatting for the console.
+		std::cout << "  |";
+
+		// Create a new line.
+		std::cout << std::endl;
+
+		// Subtract one from currentRow.
+		--currentRow;
+	}
+
+	// Formatting for the console.
+	std::cout << "-------------------" << std::endl;
+	std::cout << "   A     B     C   " << std::endl;
+
+	// Nothing left to do, so this function is over. return 0;
 }

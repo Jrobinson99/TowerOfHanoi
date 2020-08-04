@@ -22,6 +22,7 @@ void displayColumns(std::stack<int> columnOne,
 	std::stack<int> columnTwo,
 	std::stack<int> columnThree);
 
+
 /**
  * main function that provides the primary operations of the game.
  *
@@ -34,10 +35,11 @@ int main() {
 	// By default, this is false so that the game will run.
 	// Once the game finishes and the user choses not to play
 	// again, this will be set to true and the application with end.
-	bool gameOver = false;
+	bool continuePlaying = true;
 
-	// While gameOver is equal to false, then keep the game running.
-	while (!gameOver) {
+	// While continuePlaying is set to true, this will loop until the user chooses to be done.
+	while (continuePlaying) {
+
 		// Holds how many disks the user wants during their game.
 		int disks = newGame();
 
@@ -56,12 +58,61 @@ int main() {
 			columnOne.push(i);
 		}
 
-		displayColumns(columnOne, columnTwo, columnThree);
+		// This manages whether or not the current game is over
+		bool isGameOver = false;
 
+
+		// @TODO this is the main part of the game.
+
+		// If isGameOver is equal to false, continue to loop because the game is
+		// still being played by the user.
+		while (!isGameOver) {
+			
+			// Print 25 new lines so that it appears as though the console has been cleared.
+			std::cout << std::string(25, '\n');
+
+			// Display the current status of the game.
+			displayColumns(columnOne, columnTwo, columnThree);
+
+		}
+			
+		// If the while loop above is finished, that means the user has won.
+		// Display a congratulations message to the user.
+		std::cout << "Congratulations! You won!" << std::endl << std::endl;
+
+		// Holds the input from the user, in regards to if they want to play again or not.
+		std::string input = "";
+
+		// The user may want to play again, so ask them if they want to play again
+		// until they input 
+		while (input != "y" || input != "Y" || input != "n" || input != "N") {
+			
+			// Ask the user if they want to play again.
+			std::cout << "Would you like to play again? y/n : ";
+			// Collect the input from the user.
+			std::cin >> input;
+
+			// If the user inserted something other than 'y', 'Y', 'n', 'N', then tell
+			// the user that their input is invalid.
+			if (input != "y" || input != "Y" || input != "n" || input != "N") {
+				// Output that the input is invalid.
+				std::cout << "'" << input << "'" << " is not a valid input." << std::endl;
+			}
+			// Else if, the user entered 'n' or 'N'.
+			else if (input == "n" || input == "N") {
+				// Set continuePlaying to false because the user is no longer going to play.
+				continuePlaying = false;
+			} else { /* Nothing to do here. doNothing(); */ }
+		}
 	}
 
-	// The game is over and the player does not want to play again, therefore,
-	// go ahead and exit the program.
+	// The game is now over, so tell the user thank you for playing.
+	do{
+		// Output to the console.
+		std::cout << '\n' << "Thank you for playing! Press a key to exit...";
+	} while (std::cin.get() != '\n');
+
+	// Return 0 to exit the program.
 	return 0;
 }
 
@@ -181,9 +232,6 @@ void displayColumns(std::stack<int> columnOne,
 		// Set currentRow to be equal to the soze of columnThree.
 		currentRow = columnThree.size();
 	}
-
-	// Clear the console so that the only thing displayed is the current move of the game.
-	system("CLS");
 
 	// Formatting for the console.
 	std::cout << "-------------------" << std::endl;

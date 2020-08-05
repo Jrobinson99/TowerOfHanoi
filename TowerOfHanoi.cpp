@@ -4,6 +4,7 @@
  * Date: 7/23/2020
  */
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <stack>
@@ -21,6 +22,9 @@ int newGame();
 void displayColumns(std::stack<int> columnOne,
 	std::stack<int> columnTwo,
 	std::stack<int> columnThree);
+
+/// Prototype function for the toLower() function.
+std::string toLower(std::string str);
 
 
 /**
@@ -61,9 +65,6 @@ int main() {
 		// This manages whether or not the current game is over
 		bool isGameOver = false;
 
-
-		// @TODO this is the main part of the game.
-
 		// If isGameOver is equal to false, continue to loop because the game is
 		// still being played by the user.
 		while (!isGameOver) {
@@ -74,43 +75,20 @@ int main() {
 			// Display the current status of the game.
 			displayColumns(columnOne, columnTwo, columnThree);
 
+
+			system("pause");
+			isGameOver = true;
 		}
 			
 		// If the while loop above is finished, that means the user has won.
 		// Display a congratulations message to the user.
-		std::cout << "Congratulations! You won!" << std::endl << std::endl;
+		std::cout << std::endl << "Congratulations! You won!" << std::endl << std::endl;
 
-		// Holds the input from the user, in regards to if they want to play again or not.
-		std::string input = "";
-
-		// The user may want to play again, so ask them if they want to play again
-		// until they input 
-		while (input != "y" || input != "Y" || input != "n" || input != "N") {
-			
-			// Ask the user if they want to play again.
-			std::cout << "Would you like to play again? y/n : ";
-			// Collect the input from the user.
-			std::cin >> input;
-
-			// If the user inserted something other than 'y', 'Y', 'n', 'N', then tell
-			// the user that their input is invalid.
-			if (input != "y" || input != "Y" || input != "n" || input != "N") {
-				// Output that the input is invalid.
-				std::cout << "'" << input << "'" << " is not a valid input." << std::endl;
-			}
-			// Else if, the user entered 'n' or 'N'.
-			else if (input == "n" || input == "N") {
-				// Set continuePlaying to false because the user is no longer going to play.
-				continuePlaying = false;
-			} else { /* Nothing to do here. doNothing(); */ }
-		}
+		// Call the playAgain() function to see if they would like to play again, then set the
+		// variable continuePlaying to whatever is returned. continuePlaying controls the parent
+		// while loop.
+		continuePlaying = playAgain();
 	}
-
-	// The game is now over, so tell the user thank you for playing.
-	do{
-		// Output to the console.
-		std::cout << '\n' << "Thank you for playing! Press a key to exit...";
-	} while (std::cin.get() != '\n');
 
 	// Return 0 to exit the program.
 	return 0;
@@ -301,4 +279,59 @@ void displayColumns(std::stack<int> columnOne,
 	std::cout << "   A     B     C   " << std::endl;
 
 	// Nothing left to do, so this function is over. return 0;
+}
+
+/**
+ * Takes a string and converts it to lowercase. std::lower accepts a single char
+ * this accepts an entire string.
+ *
+ * @string to be converted to all lowercase.
+ *
+ * @return a string that has been converted to all lowercase.
+ */
+std::string toLower(std::string str) {
+
+	// Transform each character of str by using std::lower, starting at the beginning,
+	// and ending at the end of the string.
+	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+
+	// Return the string after being transformed.
+	return str;
+}
+
+/**
+ * Asks the user if they would like to play again, then takes
+ * an input of y, Y, n, or N and returns true of false based
+ * on their input.
+ *
+ * @return true or false based on the users input.
+ */
+bool playAgain() {
+
+	// Create an endless loop here, we will return from within the loop.
+	while (true) {
+
+		// Holds the input from the user, in regards to if they want to play again or not.
+		std::string input = "";
+
+		// Ask the user if they want to play again.
+		std::cout << "Would you like to play again? y/n : ";
+		// Collect the input from the user.
+		std::cin >> input;
+
+		// If the user inserted something other than 'y', 'Y', 'n', 'N', then tell
+		// the user that their input is invalid.
+		if (toLower(input) != "y" && toLower(input) != "n") {
+			// Output that the input is invalid.
+			std::cout << "'" << input << "'" << " is not a valid input." << std::endl;
+		}
+		// Else if, the user entered 'n' or 'N'.
+		else if (toLower(input) == "n") {
+			// Return false because the user does not want to play again.
+			return false;
+		} else { 
+			// else, the user entered 'y' or 'Y', therefore turn true because they want to play again.
+			return true;
+		}
+	}
 }

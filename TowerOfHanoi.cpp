@@ -26,6 +26,11 @@ void displayColumns(std::stack<int> columnOne,
 /// Prototype function for the toLower() function.
 std::string toLower(std::string str);
 
+/// Prototype function for the playAgain() function.
+bool playAgain();
+
+/// Prototype function for the moveDisk() function.
+void moveDisk(std::stack<int> & stkA, std::stack<int> & stkB);
 
 /**
  * main function that provides the primary operations of the game.
@@ -74,7 +79,8 @@ int main() {
 
 			// Display the current status of the game.
 			displayColumns(columnOne, columnTwo, columnThree);
-
+			moveDisk(columnOne, columnTwo);
+			displayColumns(columnOne, columnTwo, columnThree);
 
 			system("pause");
 			isGameOver = true;
@@ -285,7 +291,7 @@ void displayColumns(std::stack<int> columnOne,
  * Takes a string and converts it to lowercase. std::lower accepts a single char
  * this accepts an entire string.
  *
- * @string to be converted to all lowercase.
+ * @std::string to be converted to all lowercase.
  *
  * @return a string that has been converted to all lowercase.
  */
@@ -334,4 +340,20 @@ bool playAgain() {
 			return true;
 		}
 	}
+}
+
+/**
+ * Take the top element of one stack and place it within a second stack.
+ *
+ * @std::stack that the disk should be removed from.
+ *
+ * @std::stack that the disk should be placed into.
+ */
+void moveDisk(std::stack<int> & stkA, std::stack<int> & stkB) {
+	
+	// Take the top element of stkA and place it on top of stkB.
+	stkB.emplace(stkA.top());
+
+	// Remove the top element of stkA.
+	stkA.pop();
 }

@@ -79,16 +79,25 @@ int main() {
 
 			// Display the current status of the game.
 			displayColumns(columnOne, columnTwo, columnThree);
-			moveDisk(columnOne, columnTwo);
-			displayColumns(columnOne, columnTwo, columnThree);
 
-			system("pause");
-			isGameOver = true;
-		}
+
+
 			
-		// If the while loop above is finished, that means the user has won.
-		// Display a congratulations message to the user.
-		std::cout << std::endl << "Congratulations! You won!" << std::endl << std::endl;
+			
+
+			// The only way for the game to be complete is if columnOne is completely empty,
+			// and for columnTwo or columnThree has all of the disks in it. Therefore, if 
+			// columnTwo or columnThree is the same size as the number of disks in the game,
+			// then the user has successfully completed the game.
+			if (columnTwo.size() == disks || columnThree.size() == disks) {
+				
+				// Set isGameOver to true so the loop ends.
+				isGameOver = true;
+
+				// Display a congratulations message to the user.
+				std::cout << std::endl << "Congratulations! You won!" << std::endl << std::endl;
+			}else{ /* There is nothing to do here. doNothing(); */ }
+		}
 
 		// Call the playAgain() function to see if they would like to play again, then set the
 		// variable continuePlaying to whatever is returned. continuePlaying controls the parent

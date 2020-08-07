@@ -1,7 +1,7 @@
 /*
  * Tower of Hanoi game.
  * Developed as a portfolio projected by River Robinson.
- * Date: 7/23/2020
+ * Date: 7/23/2020 - 8/7/2020
  */
 
 #include <algorithm>
@@ -31,6 +31,12 @@ bool playAgain();
 
 /// Prototype function for the moveDisk() function.
 void moveDisk(std::stack<int> & stkA, std::stack<int> & stkB);
+
+/// Prototype function for the bool validateSelectedColumn() function.
+bool validateSelectedColumn(std::string column);
+
+/// Prototype function for the bool validMove() function.
+bool validMove(std::stack<int> columnOne, std::stack<int> columnTwo);
 
 /**
  * main function that provides the primary operations of the game.
@@ -73,30 +79,148 @@ int main() {
 		// If isGameOver is equal to false, continue to loop because the game is
 		// still being played by the user.
 		while (!isGameOver) {
-			
+
 			// Print 25 new lines so that it appears as though the console has been cleared.
 			std::cout << std::string(25, '\n');
 
 			// Display the current status of the game.
 			displayColumns(columnOne, columnTwo, columnThree);
 
+			bool isValidMove = false;
 
+			while (!isValidMove) {
+				// Holds the first input from the user.
+				std::string columnA = "";
 
-			
-			
+				// Displays to the console.
+				std::cout << "Which column do you want to move a disk from? : ";
+				// Collects the users input.
+				std::cin >> columnA;
+
+				// While columnOne is invalid, stay in a loop until the user enters a correct value.
+				while (!validateSelectedColumn(columnA)) {
+
+					// Clear the input string.
+					columnA.clear();
+					// Display to the console.
+					std::cout << "Input was invalid. Please try again : ";
+					// Collect the user's new input.
+					std::cin >> columnA;
+				}
+
+				// Holds the first input from the user.
+				std::string columnB = "";
+
+				// Displays to the console.
+				std::cout << "Which column do you want to move a disk to? : ";
+				// Collects the users input.
+				std::cin >> columnB;
+
+				// While columnTwo is invalid, stay in a loop until the user enters a correct value.
+				while (!validateSelectedColumn(columnB)) {
+
+					// Clear the input string.
+					columnB.clear();
+					// Display to the console.
+					std::cout << "Input was invalid. Please try again : ";
+					// Collect the user's new input.
+					std::cin >> columnB;
+				}
+
+				
+				// TODO : Find a better way to implement this somehow.
+
+				// If the users two inputs are not the same, then proceed.
+				if (columnA != columnB) {
+					// If columnA is equal to a.
+					if (toLower(columnA) == "a") {
+						// If columnB equals b.
+						if (toLower(columnB) == "b") {
+							// Check if moving from columnOne to ColumnTwo is valid.
+							std::cout << "003" << std::endl;
+							if (validMove(columnOne, columnTwo)) {
+								std::cout << "001" << std::endl;
+								moveDisk(columnOne, columnTwo);
+								std::cout << "002" << std::endl;
+								isValidMove = true;
+							} else {/* Nothing to do here. doNothing(); */ }
+						}
+						// Else columbB must be c.
+						else {
+							// Check if moving from columnOne to ColumnThree is valid.
+							if (validMove(columnOne, columnThree)) {
+								moveDisk(columnOne, columnThree);
+								isValidMove = true;
+							} else {/* Nothing to do here. doNothing(); */ }
+						}
+					}
+					// If columnA is equal to b.
+					else if (toLower(columnA) == "b") {
+						// If columnB is equal to a.
+						if (toLower(columnB) == "a") {
+							// Check if moving from columnTwo to ColumnOne is valid.
+							if (validMove(columnTwo, columnOne)) {
+								moveDisk(columnTwo, columnOne);
+								isValidMove = true;
+							} else {/* Nothing to do here. doNothing(); */ }
+						}
+						// Else columnB must be c.
+						else {
+							// Check if moving from columnTwo to ColumnThree is valid.
+							if (validMove(columnTwo, columnThree)) {
+								moveDisk(columnTwo, columnThree);
+								isValidMove = true;
+							} else {/* Nothing to do here. doNothing(); */ }
+						}
+					}
+					// Else columnA must be c.
+					else {
+						// If columnB is equal to a.
+						if (toLower(columnB) == "a") {
+							// Check if moving from columnThree to ColumnOne is valid.
+							if (validMove(columnThree, columnOne)) {
+								moveDisk(columnThree, columnOne);
+								isValidMove = true;
+							}
+							else {/* Nothing to do here. doNothing(); */ }
+						}
+						// Else columnB must be a.
+						else {
+							// Check if moving from columnThree to ColumnTwo is valid.
+							if (validMove(columnThree, columnTwo)) {
+								moveDisk(columnThree, columnTwo);
+								isValidMove = true;
+							}
+							else {/* Nothing to do here. doNothing(); */ }
+						}
+					}
+				}
+				// Else the user entered the same columns.
+				else {
+					// Tell the user they cannot pick the same column.
+					std::cout << "You cannot pick the same columns!" << std::endl << std::endl;
+				}
+
+				// If isValidMove is still false, then the users move was invalid.
+				if (!isValidMove) {
+					// Tell the user the move was invalid.
+					std::cout << "That move is not valid!" << std::endl;
+				}else{ /* Nothing to do here. doNothing(); */ }
+			}
 
 			// The only way for the game to be complete is if columnOne is completely empty,
 			// and for columnTwo or columnThree has all of the disks in it. Therefore, if 
 			// columnTwo or columnThree is the same size as the number of disks in the game,
 			// then the user has successfully completed the game.
 			if (columnTwo.size() == disks || columnThree.size() == disks) {
-				
+
 				// Set isGameOver to true so the loop ends.
 				isGameOver = true;
 
 				// Display a congratulations message to the user.
 				std::cout << std::endl << "Congratulations! You won!" << std::endl << std::endl;
-			}else{ /* There is nothing to do here. doNothing(); */ }
+			}
+			else { /* There is nothing to do here. doNothing(); */ }
 		}
 
 		// Call the playAgain() function to see if they would like to play again, then set the
@@ -203,8 +327,8 @@ int newGame() {
  * @stack object for column three.
  */
 void displayColumns(std::stack<int> columnOne,
-					std::stack<int> columnTwo,
-					std::stack<int> columnThree) {
+	std::stack<int> columnTwo,
+	std::stack<int> columnThree) {
 
 	// Holds the value of which 'row' is currently being read.
 	// This is set to whichever column is the largest.
@@ -244,7 +368,8 @@ void displayColumns(std::stack<int> columnOne,
 			std::cout << columnOne.top();
 			// Pop off the top element.
 			columnOne.pop();
-		} else { 
+		}
+		else {
 			// Add a single space to help keep the columns the same size.
 			std::cout << " ";
 		}
@@ -259,7 +384,8 @@ void displayColumns(std::stack<int> columnOne,
 			std::cout << columnTwo.top();
 			// Pop off the top element.
 			columnTwo.pop();
-		} else {
+		}
+		else {
 			// Add a single space to help keep the columns the same size.
 			std::cout << " ";
 		}
@@ -274,7 +400,8 @@ void displayColumns(std::stack<int> columnOne,
 			std::cout << columnThree.top();
 			// Pop off the top element.
 			columnThree.pop();
-		} else {
+		}
+		else {
 			// Add a single space to help keep the columns the same size.
 			std::cout << " ";
 		}
@@ -344,7 +471,8 @@ bool playAgain() {
 		else if (toLower(input) == "n") {
 			// Return false because the user does not want to play again.
 			return false;
-		} else { 
+		}
+		else {
 			// else, the user entered 'y' or 'Y', therefore turn true because they want to play again.
 			return true;
 		}
@@ -359,10 +487,71 @@ bool playAgain() {
  * @std::stack that the disk should be placed into.
  */
 void moveDisk(std::stack<int> & stkA, std::stack<int> & stkB) {
-	
+
 	// Take the top element of stkA and place it on top of stkB.
 	stkB.emplace(stkA.top());
 
 	// Remove the top element of stkA.
 	stkA.pop();
+}
+
+/**
+ * Takes an input string and determines whether it is equal to
+ * A, B, or C.
+ *
+ * @string to be verified.
+ *
+ * @return true or false in regards to if it is valid.
+ */
+bool validateSelectedColumn(std::string column) {
+
+	// Convert the input to lowercase 
+	column = toLower(column);
+
+	// If the input is not equal to a, b, or c then return false.
+	if (column != "a" && column != "b" && column != "c") {
+		return false;
+	}
+	// Since we returned false on anything that wasn't a, b, or c
+	// then the input must be valid, so return true.
+	else {
+		return true;
+	}
+}
+
+/**
+ * Check the validity of the move.
+ *
+ * @std::string that contains the column the disk is being moved from.
+ *
+ * @std::string that contains the column the disk is being moved to.
+ *
+ * @return true or false depending on whether or not the move is valid.
+ */
+bool validMove(std::stack<int> columnOne, std::stack<int> columnTwo) {
+	
+	// Check to make sure columnOne is not empty.
+	if (!columnOne.empty()) {
+		// Check to see if columnTwo is empty.
+		if (!columnTwo.empty()) {
+			// Check to see if the disk being placed is smaller than
+			// the disk it is being placed onto.
+			if (columnOne.top() <= columnTwo.top()) {
+				return true;
+			}
+			// Else the disk being moved is larger than the one
+			// it is being placed onto.
+			else {
+				return false;
+			}
+		}
+		// Else, column two is empty and the disk can be moved.
+		else {
+			return true;
+		}
+	}
+	// Else columnOne is empty, meaning there is no disk to move.
+	else {
+		return false;
+	}
 }

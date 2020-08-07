@@ -137,11 +137,10 @@ int main() {
 						// If columnB equals b.
 						if (toLower(columnB) == "b") {
 							// Check if moving from columnOne to ColumnTwo is valid.
-							std::cout << "003" << std::endl;
 							if (validMove(columnOne, columnTwo)) {
-								std::cout << "001" << std::endl;
+								// Move the top disk from columnOne to columnTwo.
 								moveDisk(columnOne, columnTwo);
-								std::cout << "002" << std::endl;
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							} else {/* Nothing to do here. doNothing(); */ }
 						}
@@ -149,7 +148,9 @@ int main() {
 						else {
 							// Check if moving from columnOne to ColumnThree is valid.
 							if (validMove(columnOne, columnThree)) {
+								// Move the top disk from columnOne to columnThree.
 								moveDisk(columnOne, columnThree);
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							} else {/* Nothing to do here. doNothing(); */ }
 						}
@@ -160,7 +161,9 @@ int main() {
 						if (toLower(columnB) == "a") {
 							// Check if moving from columnTwo to ColumnOne is valid.
 							if (validMove(columnTwo, columnOne)) {
+								// Move the top disk from columnTwo to columnOne.
 								moveDisk(columnTwo, columnOne);
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							} else {/* Nothing to do here. doNothing(); */ }
 						}
@@ -168,7 +171,9 @@ int main() {
 						else {
 							// Check if moving from columnTwo to ColumnThree is valid.
 							if (validMove(columnTwo, columnThree)) {
+								// Move the top disk from columnTwo to columnOne.
 								moveDisk(columnTwo, columnThree);
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							} else {/* Nothing to do here. doNothing(); */ }
 						}
@@ -179,7 +184,9 @@ int main() {
 						if (toLower(columnB) == "a") {
 							// Check if moving from columnThree to ColumnOne is valid.
 							if (validMove(columnThree, columnOne)) {
+								// Move the top disk from columnThree to columnOne.
 								moveDisk(columnThree, columnOne);
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							}
 							else {/* Nothing to do here. doNothing(); */ }
@@ -188,7 +195,9 @@ int main() {
 						else {
 							// Check if moving from columnThree to ColumnTwo is valid.
 							if (validMove(columnThree, columnTwo)) {
+								// Move the top disk from columnThree to columnTwo.
 								moveDisk(columnThree, columnTwo);
+								// Set isValidMove to true so the loop ends.
 								isValidMove = true;
 							}
 							else {/* Nothing to do here. doNothing(); */ }
@@ -327,8 +336,8 @@ int newGame() {
  * @stack object for column three.
  */
 void displayColumns(std::stack<int> columnOne,
-	std::stack<int> columnTwo,
-	std::stack<int> columnThree) {
+					std::stack<int> columnTwo,
+					std::stack<int> columnThree) {
 
 	// Holds the value of which 'row' is currently being read.
 	// This is set to whichever column is the largest.
